@@ -1,11 +1,11 @@
-FROM ubuntu
-ARG NODE_VERSION=setup_20.x
-RUN apt -y update && \
-  apt install -y curl && \
-  curl -fsSL https://deb.nodesource.com/${NODE_VERSION} | bash - &&\
-  apt -y update && \
-  apt-get install -y nodejs
+# A imagem precisa ser enxuta, confiável e versionada
+# Versionamento da imagem, além de ser boa prática garante idempotência
+#Sempre que construir essa imagem, ela terá o mesmo comportamento
+FROM node:20.11.1-alpine3.19
 WORKDIR /app
+#executando as dependencias de forma otimizada na construção das camadas na instalação dos pacotes da aplicação
+COPY src/package*.json .
+RUN npm install
 COPY . ./
-RUN cd src && npm install
+EXPOSE 8080
 ENTRYPOINT ["node", "src/server.js"]
