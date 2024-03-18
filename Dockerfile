@@ -1,10 +1,7 @@
-FROM ubuntu
-ARG NODE_VERSION=setup_20.x
-RUN apt -y update && \
-  apt install -y curl && \
-  curl -fsSL https://deb.nodesource.com/${NODE_VERSION} | bash - &&\
-  apt -y update && \
-  apt-get install -y nodejs
+# A imagem precisa ser enxuta, confiável e versionada
+# Versionamento da imagem, além de ser boa prática garante idempotência
+#Sempre que construir essa imagem, ela terá o mesmo comportamento
+FROM node:20.9.0
 WORKDIR /app
 COPY . ./
 RUN cd src && npm install
