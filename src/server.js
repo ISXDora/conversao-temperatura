@@ -5,6 +5,20 @@ const conversor = require('./convert')
 const bodyParser = require('body-parser');
 const config = require('./config/system-life');
 const path = require('path');
+const promBundle = require('express-prom-bundle');
+
+const metricsMiddleware = promBundle({
+  includePath: true,
+  includeStatusCode: true,
+  includeMethod: true,
+  customLabels: {service: 'conversao-temperatura'},
+  promClient: {
+    collectDefaultMetrics: {
+    }
+  }
+});
+
+app.use(metricsMiddleware);
 
 app.use(config.middlewares.healthMid);
 app.use('/', config.routers);
